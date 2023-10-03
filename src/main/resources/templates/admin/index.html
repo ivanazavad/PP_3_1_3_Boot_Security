@@ -1,27 +1,103 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en" style="height: 100%">
 <head>
     <meta charset="UTF-8">
-    <title>All users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Users</title>
 </head>
-<body>
+<body style="background-color: #f8f9fa ; height: 100%">
+<nav style="color: white" class="navbar navbar-dark bg-dark">
+    <span id="span"></span>
+    <form class="form-inline">
+        <a style="color: grey" th:href="@{/}" class="auth-button right-top-button">LOGOUT</a>
+    </form>
+</nav>
 
-<div th:each="user : ${users}">
-    <a th:href="@{/admin/{id}(id=${user.getId()})}"
-       th:text="${user.getUsername() + ', ' + user.getAge()}">User</a>
+<div class="container-fluid h-100 d-flex">
+
+    <div class="row w-100 h-100">
+
+        <div style="background-color: white; padding-left: 0; padding-top: 10px; padding-right: 0" class="col-sm">
+            <div>
+                <button style="padding-right: 155px" type="button" class="btn btn-primary btn-block" href="">Admin
+                </button>
+            </div>
+            <button style="padding-right: 170px; border: 0; background-color: white; color: blue"
+                    class="btn btn-outline-secondary btn-block"
+                    onclick="window.location.href='/user'">User
+            </button>
+        </div>
+
+        <div class="col-sm-10">
+            <h1>Admin panel</h1>
+
+            <ul class="nav nav-tabs">
+                <li style="background-color: white; border: 0">
+                    <button id="tableAdmin" class="nav-link active" data-toggle="tab" href="#userstable">Users
+                        table
+                    </button>
+                </li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/new}">New User</a></li>
+            </ul>
+
+            <div style="background-color: white; border: 1px solid #ccc;border-radius: 5px;" class="tab-content">
+                <div id="userstable" class="tab-pane fade show active">
+
+                    <nav class="navbar navbar-light bg-light">
+                        <span class="navbar-brand mb-0 h1">All Users</span>
+                    </nav>
+                    <div class="container-fluid mt-3 mb-3">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">age</th>
+                                <th scope="col">Show</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">delete</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.getId()}"></td>
+                                <td th:text="${user.getUsername()}"></td>
+                                <td th:text="${user.getAge()}"></td>
+                                <td>
+                                    <form th:action="@{/admin/{id}(id=${user.getId()})}">
+                                        <input type="submit" value="SHOW"/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form th:action="@{/admin/{id}/edit(id=${user.getId()})}">
+                                        <input type="submit" value="EDIT"/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+                                        <input type="submit" value="DELETE"/>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<br/>
-<hr/>
-
-<a href="/admin/new">Create new user</a>
-<br/>
-<br/>
-<hr/>
-<form th:action="@{/logout}" th:method="POST">
-    <input type="submit" value="Logout"/>
-</form>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </body>
 </html>
