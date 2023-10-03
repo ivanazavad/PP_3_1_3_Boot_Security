@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
@@ -42,7 +42,7 @@
     <div class="welcome">
         <p>REGISTRATION</p>
     </div>
-    <form th:method="POST" th:action="@{/admin/registration}" th:object="${user}">
+    <form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
         <input type="text" th:field="*{username}" id="username" class="auth-input" placeholder="Username">
         <div style="color: deeppink" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</div>
         <br/>
