@@ -51,12 +51,11 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("user") @Valid User user,
-                         @RequestParam("selectedRole") String selectedRole,
-                         BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                         @RequestParam("selectedRole") String selectedRole) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "redirect:/admin/new";
+            return "admin/new";
         }
         registrationService.register(user, selectedRole);
         return "redirect:/admin/index";
@@ -69,9 +68,12 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") Integer id,
                          @RequestParam("selectedRole") String selectedRole) {
+        if (bindingResult.hasErrors()) {
+            return "admin/edit";
+        }
         user.getRole().add(new Role(selectedRole));
         userService.updateUser(id, user);
         return "redirect:/admin/index";
