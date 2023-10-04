@@ -10,6 +10,7 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
@@ -23,9 +24,8 @@ public class UsersController {
     }
 
     @GetMapping
-    public String userPage(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("user", userService.getUserByUsername(username));
+    public String userPage(Model model, Principal principal) {
+        model.addAttribute("user", userService.getUserByUsername(principal.getName()));
         return "user/user_page";
     }
 

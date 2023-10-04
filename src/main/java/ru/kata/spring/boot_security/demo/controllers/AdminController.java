@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,8 +33,8 @@ public class AdminController {
     }
 
     @GetMapping("/index")
-    public String index(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    public String index(@ModelAttribute("user") User user, Model model, Principal principal) {
+        model.addAttribute("user", userService.getUserByUsername(principal.getName()));
         return "admin/index";
     }
 

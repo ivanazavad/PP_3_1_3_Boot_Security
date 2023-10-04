@@ -10,6 +10,11 @@
 </head>
 <body style="background-color: #f8f9fa ; height: 100%">
 <nav style="color: white" class="navbar navbar-dark bg-dark">
+    <h4>
+        <form class="navbar-form navbar-left">
+            <span style="color: white" th:text="${user.getUsername()}">VALUE</span>
+        </form>
+    </h4>
     <span id="span"></span>
     <form class="form-inline">
         <a style="color: grey" th:href="@{/}" class="auth-button right-top-button">LOGOUT</a>
