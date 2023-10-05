@@ -34,6 +34,7 @@ public class AdminController {
 
     @GetMapping("/index")
     public String index(@ModelAttribute("user") User user, Model model, Principal principal) {
+        model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("user", userService.getUserByUsername(principal.getName()));
         return "admin/index";
     }
