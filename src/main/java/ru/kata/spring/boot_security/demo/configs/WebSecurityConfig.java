@@ -30,20 +30,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/auth/login/**", "/auth/registration/**", "/error").permitAll()
+                .antMatchers("/", "/login/**", "/error").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/auth/login")
+                .formLogin().loginPage("/login")
                 .loginProcessingUrl("/process_login")
                 .successHandler(successUserHandler)
-                .failureUrl("/auth/login?error")
+                .failureUrl("/login?error")
                 .and()
                 .logout().permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/login");
     }
 
 
