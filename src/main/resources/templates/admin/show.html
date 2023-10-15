@@ -38,7 +38,7 @@
             <div class="container-fluid" style="padding-left: 0px; padding-right: 0px">
                 <ul class="nav nav-pills nav-stacked" role="tablist">
                     <li><a th:href="@{/admin/index}">Admin</a></li>
-                    <li class="active"><a th:href="@{/user}">User information page</a></li>
+                    <li class="active"><a th:href="@{/admin/{id}(id=${user.getId()})}">User information page</a></li>
                 </ul>
             </div>
         </div>

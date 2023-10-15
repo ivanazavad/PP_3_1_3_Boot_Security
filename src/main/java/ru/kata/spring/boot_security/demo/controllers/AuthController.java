@@ -39,9 +39,8 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") @Valid User user,
-                               @RequestParam("selectedRole") String selectedRole,
-                               BindingResult bindingResult) {
+    public String registration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                               @RequestParam("selectedRole") String selectedRole) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/auth/registration";
