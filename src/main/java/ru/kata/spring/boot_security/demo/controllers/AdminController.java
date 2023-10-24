@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -21,19 +23,22 @@ public class AdminController {
     private final RoleService roleService;
     private final RegistrationService registrationService;
     private final UserValidator userValidator;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService,
-                           RegistrationService registrationService, UserValidator userValidator) {
+                           RegistrationService registrationService, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.registrationService = registrationService;
         this.userValidator = userValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/index")
-    public String index(Model model) {
+    public String index(@ModelAttribute("user") User user, Model model, Principal principal) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("user", userService.getUserByUsername(principal.getName()));
         return "admin/index";
     }
 
@@ -51,12 +56,11 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("user") @Valid User user,
-                         @RequestParam("selectedRole") String selectedRole,
-                         BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                         @RequestParam("selectedRole") String selectedRole) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "redirect:/admin/new";
+            return "admin/new";
         }
         registrationService.register(user, selectedRole);
         return "redirect:/admin/index";
@@ -69,9 +73,13 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") Integer id,
                          @RequestParam("selectedRole") String selectedRole) {
+        if (bindingResult.hasErrors()) {
+            return "admin/edit";
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRole().add(new Role(selectedRole));
         userService.updateUser(id, user);
         return "redirect:/admin/index";
